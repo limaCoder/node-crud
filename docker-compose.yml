@@ -1,0 +1,31 @@
+version: "3.7"
+
+services:
+  database_crud_node:
+    image: postgres
+    container_name: database_crud_node
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=crud_node
+    volumes:
+      - pgdata:/data/postgres
+  app:
+    build: .
+    container_name: crud_node_app
+    restart: always
+    ports:
+      - 3333:3333
+    volumes:
+      - .:/usr/app
+    links: 
+      - database_crud_node
+    depends_on:
+      - database_crud_node
+
+volumes:
+  pgdata:
+    driver: local
